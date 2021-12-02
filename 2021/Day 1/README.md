@@ -44,8 +44,6 @@ In this example, there are **`7`** measurements that are larger than the previou
 
 **How many measurements are larger than the previous measurement?**
 
-,
-
 ## --- Part Two ---
 
 Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
@@ -81,7 +79,5 @@ In the above example, the sum of each three-measurement window is as follows:
 In this example, there are **`5`** sums that are larger than the previous sum.
 
 Consider sums of a three-measurement sliding window. **How many sums are larger than the previous sum?**
-
-]
 
 https://adventofcode.com/2021/day/1
