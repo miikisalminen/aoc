@@ -1,64 +1,81 @@
-# This solution actually does not work, ill have to come back to this
 
-from collections import Counter
-
-input_list = []
-oxygen = ""
-co2 = ""
-
-# ls : list to search
-# pos : bit position
-# pref : preferred outcome of a equality
-def findMostCommonBit(ls, pos, pref):
+def find_most_common(ls, pos):
     ones = 0
     zeros = 0
+
     for i in ls:
         if(i[pos] == "0"):
-            zeros+=1
-        else:
-            ones+=1
-    
-    if(ones > zeros):
+            zeros = zeros + 1
+        if(i[pos] == "1"):
+            ones = ones + 1
+
+    if(ones >= zeros):
         return "1"
-    if(ones == zeros and pref == "1"):
-        return "1"
-    
-    if(zeros > ones):
-        return "0"
-    if(zeros == ones and pref == "0"):
+    else:
         return "0"
 
-def calcOxygenRating(ls):
-    while len(ls) != 1:
-        for i in range(12):
-            common = findMostCommonBit(ls, i, "1")
-            for j in ls:
-                if j[i] != common:
-                    ls.remove(j)
-    print("oxygen " + ls[0])
-    return (int(ls[0], 2))
+def find_least_common(ls, pos):
+    ones = 0
+    zeros = 0
 
-def calcCO2Scrubber(ls):
-    while len(ls) != 1:
+    for i in ls:
+        if(i[pos] == "0"):
+            zeros = zeros + 1
+        if(i[pos] == "1"):
+            ones = ones + 1
+    
+    if(ones >= zeros):
+        return "0"
+    else:
+        return "1"
+
+def convert(bin):
+    return int(bin, 2)
+
+def oxygen_rating(ls):
+    e = 0
+    while e < len(ls):
         for i in range(12):
-            common = findMostCommonBit(ls, i, "0")
-            for j in ls:
-                if j[i] != common:
-                    ls.remove(j)
-    print(ls)
-    return (int(ls[0], 2))
+            for j in range(len(ls)):
+                try:
+                    if ls[j][i] != find_most_common(ls, i):
+                        del ls[j]
+                        e = e + 1
+                except IndexError:
+                    continue
+                
+    return ls
+
+def scrubber_rating(ls):
+    e = 0
+    while e < len(ls):
+        for i in range(12):
+            for j in range(len(ls)):
+                try:
+                    if ls[j][i] != find_least_common(ls, i):
+                        del ls[j]
+                        e = e + 1
+                except IndexError:
+                    continue
+                
+    return ls
 
 def main():
+    input_list = []
     f = open("input.txt", "r")
     for x in f:
         input_list.append(x.strip())
     
-    print(calcCO2Scrubber(input_list.copy()) * calcOxygenRating(input_list.copy()) )
+    oxygen_list = input_list.copy()
+    scrubber_list = input_list.copy()
+
+    oxygen_list = oxygen_rating(oxygen_list)
+    print(oxygen_list)
+
+    scrubber_list = scrubber_rating(scrubber_list)
+    print(scrubber_list)
+
+    print(convert(oxygen_list[3]) * convert(scrubber_list[3]) )
 
 if __name__ == "__main__":
     main()
-
-
-#print(oxygen + " : " + gamma)
-#print(co2 + " : " + epsilon)
-#print(int(oxygen, 2) * int(co2, 2))
